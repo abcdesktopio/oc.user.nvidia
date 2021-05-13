@@ -1,4 +1,3 @@
-FROM abcdesktopio/oc.user.18.04:dev
 
 # defaul TAG is dev
 ARG TAG=dev
