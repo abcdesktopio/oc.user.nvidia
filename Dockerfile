@@ -23,12 +23,13 @@ USER 0
 # FROM ubuntu:18.04
 # LABEL maintainer "NVIDIA CORPORATION <cudatools@nvidia.com>"
 
+RUN echo "https://developer.download.nvidia.com/compute/cuda/repos/$BASE_NVIDIA_IMAGE/$ARCH"
+
 RUN apt-get update && apt-get install -y --no-install-recommends \
     gnupg2 curl ca-certificates && \
     curl -fsSL https://developer.download.nvidia.com/compute/cuda/repos/$BASE_NVIDIA_IMAGE/$ARCH/7fa2af80.pub | apt-key add - && \
     echo "deb https://developer.download.nvidia.com/compute/cuda/repos/$BASE_NVIDIA_IMAGE/$ARCH /" > /etc/apt/sources.list.d/cuda.list && \
     echo "deb https://developer.download.nvidia.com/compute/machine-learning/repos/$BASE_NVIDIA_IMAGE/$ARCH /" > /etc/apt/sources.list.d/nvidia-ml.list && \
-    apt-get purge --autoremove -y \
     && rm -rf /var/lib/apt/lists/*
 
 ENV CUDA_VERSION 11.2.0
