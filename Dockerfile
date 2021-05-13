@@ -1,7 +1,24 @@
 FROM abcdesktopio/oc.user.18.04:dev
 
-USER 0
+# defaul TAG is dev
+ARG TAG=dev
+# Default release is 18.04
+ARG BASE_IMAGE_RELEASE=18.04
+# Default base image 
+ARG BASE_IMAGE=abcdesktopio/oc.user.18.04
+# Default CUDA version
+ARG CUDA_VERSION=11.2.0
+# nvidia repo path
+ARG BASE_NVIDIA_IMAGE=ubuntu1804
+# arch
+ARG ARCH=x86_64
+FROM $BASE_IMAGE_RELEASE:$TAG
 
+# pass ARG to ENV
+ENV CUDA_VERSION=$CUDA_VERSION
+
+# change user to root
+USER 0
 
 # from https://gitlab.com/nvidia/container-images/cuda/blob/master/dist/11.3.0/ubuntu18.04-x86_64/base/Dockerfile
 # FROM ubuntu:18.04
@@ -9,10 +26,10 @@ USER 0
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     gnupg2 curl ca-certificates && \
-    curl -fsSL https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/x86_64/7fa2af80.pub | apt-key add - && \
-    echo "deb https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/x86_64 /" > /etc/apt/sources.list.d/cuda.list && \
-    echo "deb https://developer.download.nvidia.com/compute/machine-learning/repos/ubuntu1804/x86_64 /" > /etc/apt/sources.list.d/nvidia-ml.list && \
-    apt-get purge --autoremove -y curl \
+    curl -fsSL https://developer.download.nvidia.com/compute/cuda/repos/$BASE_NVIDIA_IMAGE/$ARCH/7fa2af80.pub | apt-key add - && \
+    echo "deb https://developer.download.nvidia.com/compute/cuda/repos/$BASE_NVIDIA_IMAGE/$ARCH /" > /etc/apt/sources.list.d/cuda.list && \
+    echo "deb https://developer.download.nvidia.com/compute/machine-learning/repos/$BASE_NVIDIA_IMAGE/$ARCH /" > /etc/apt/sources.list.d/nvidia-ml.list && \
+    apt-get purge --autoremove -y \
     && rm -rf /var/lib/apt/lists/*
 
 ENV CUDA_VERSION 11.2.0
@@ -59,13 +76,19 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 COPY 10_nvidia.json /usr/share/glvnd/egl_vendor.d/10_nvidia.json
 
 RUN apt-get update &&  apt-get install -y 	\
-	mesa-utils 
+	mesa-utils && \
+    rm -rf /var/lib/apt/lists/*
 
-# RUN  apt-get update &&  apt-get install -y       \
-#        cuda-samples-11-2
+RUN apt-get update &&  apt-get install -y       \
+        cuda-samples-11-2 && \
+    rm -rf /var/lib/apt/lists/*
+
+# to compile sample source code
 # RUN cd /usr/local/cuda-11.2/samples && make -j $(getconf _NPROCESSORS_ONLN)
-	
+
+# restore balloon context user
 USER 4096
+
 # nvidia-container-runtime
 ENV NVIDIA_VISIBLE_DEVICES all
 ENV NVIDIA_DRIVER_CAPABILITIES all
