@@ -33,9 +33,10 @@ jobs:
           # set the release to build
           BASE_IMAGE_RELEASE: 18.04
           BASE_NVIDIA_IMAGE: ubuntu1804
+          BASE_IMAGE: abcdesktopio/oc.user
       run: |
         echo "Building image oc.user.nvidia.$BASE_IMAGE_RELEASE"
-        docker build . -t abcdesktopio/oc.user.nvidia.$BASE_IMAGE_RELEASE:dev  --file Dockerfile --build-arg BASE_NVIDIA_IMAGE:$BASE_NVIDIA_IMAGE --build-arg BASE_IMAGE_RELEASE:$BASE_IMAGE_RELEASE --build-arg BASE_IMAGE=abcdesktopio/oc.software.$BASE_IMAGE_RELEASE --build-arg TAG:dev
+        docker build . -t abcdesktopio/oc.user.nvidia.$BASE_IMAGE_RELEASE:dev  --file Dockerfile --build-arg BASE_NVIDIA_IMAGE:$BASE_NVIDIA_IMAGE --build-arg BASE_IMAGE_RELEASE:$BASE_IMAGE_RELEASE --build-arg BASE_IMAGE=$BASE_IMAGE.$BASE_IMAGE_RELEASE --build-arg TAG:dev
         
     - name: Push image abcdesktopio/oc.user.nvidia.18.04
       env:
