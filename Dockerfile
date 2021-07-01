@@ -104,11 +104,7 @@ RUN cd /tigervnc && \
     apt-get install -y \
     ./tigervnc-standalone-server_1.11.0+dfsg-2_amd64.deb
 
-# RUN cd /tigervnc && ls -la
-
-# RUN cd /tigervnc/tigervnc-1.11.0+dfsg && ls -la
-
-# RUN cd /tigervnc/tigervnc-1.11.0+dfsg/debian && ls -la
+RUN cp /usr/bin/Xtigervnc /usr/bin/Xvnc 
 
 # to compile sample source code
 # RUN cd /usr/local/cuda-11.2/samples && make -j $(getconf _NPROCESSORS_ONLN)
