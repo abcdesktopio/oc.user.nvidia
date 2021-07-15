@@ -92,8 +92,9 @@ RUN apt-get update &&  apt-get install -y       \
 #Install Tigervnc
 RUN sed -i '/deb-src/s/^# //' /etc/apt/sources.list && \
     apt-get update && \
-    apt-get install -y devscripts build-essential lintian && \
-    mkdir /tigervnc && \
+    apt-get install -y devscripts build-essential lintian
+
+RUN mkdir /tigervnc && \
     cd /tigervnc && \
     apt-get source tigervnc && \
     cd tigervnc-1.11.0+dfsg && \
