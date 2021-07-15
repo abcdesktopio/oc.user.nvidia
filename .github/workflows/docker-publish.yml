@@ -4,7 +4,7 @@ on:
   push:
     branches: [ main ]
   repository_dispatch:
-    types: [dispatch-from-oc.user.18.04]
+    types: [dispatch-from-oc.user]
 jobs:
   main:
     # runs-on: self-hosted
